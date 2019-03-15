@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:typens="urn:InetCuotasWS" xmlns="http://schemas.xmlsoap.org/wsdl/" name="InetCuotasWS" targetNamespace="urn:InetCuotasWS" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:InetCuotasWS">
+      <xsd:complexType name="Usuario">
+        <xsd:all>
+          <xsd:element name="cuota" type="xsd:float" />
+          <xsd:element name="cuota_usada" type="xsd:anyType" />
+          <xsd:element name="nivel_navegacion" type="xsd:string" />
+          <xsd:element name="usuario" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ObtenerCuota">
+    <wsdl:part name="usuario" type="xsd:string" />
+    <wsdl:part name="clave" type="xsd:string" />
+    <wsdl:part name="dominio" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerCuotaResponse">
+    <wsdl:part name="ObtenerCuotaReturn" type="typens:Usuario" />
+  </wsdl:message>
+  <wsdl:portType name="InetCuotasWSPortType">
+    <wsdl:operation name="ObtenerCuota">
+      <documentation>
+				Obtener el estado de la cuota de un usuario dado su usuario y clave.
+			</documentation>
+      <wsdl:input message="typens:ObtenerCuota" />
+      <wsdl:output message="typens:ObtenerCuotaResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="InetCuotasWSBinding" type="typens:InetCuotasWSPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="ObtenerCuota">
+      <soap:operation soapAction="urn:InetCuotasWSAction" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:InetCuotasWS" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:InetCuotasWS" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="InetCuotasWSService">
+    <wsdl:port name="InetCuotasWSPort" binding="typens:InetCuotasWSBinding">
+      <soap:address location="https://cuotas.uci.cu/servicios/v1/InetCuotasWS.php" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
